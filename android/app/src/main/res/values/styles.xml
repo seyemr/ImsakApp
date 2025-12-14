@@ -1,9 +1,21 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand colors -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+
+        <!-- Accent color -->
+        <item name="colorSecondary">@color/colorAccent</item>
+
+        <!-- Background & text -->
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:textColor">@color/text</item>
+
+        <!-- TextInput uyumluluğu -->
+        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
     </style>
 
 </resources>
