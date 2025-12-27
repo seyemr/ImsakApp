@@ -6,12 +6,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useThemeContext } from '../context/ThemeContext';
 import { useNotificationContext } from '../context/NotificationContext';
+import { useLanguage } from '../context/LanguageContext';
 
-export default function SurahDetailScreen(props) {
+export default function SurahDetailScreen({ route, navigation }) {
+  const { t } = useLanguage();
+  const { id } = route?.params || {};
   const { themeColors } = useThemeContext();
   const { imsakNotif, aksamNotif } = useNotificationContext();
-  const route = props.route || { params: {} };
-  const { id } = route.params || {};
   const [surahInfo, setSurahInfo] = useState(null);
   const [ayahs, setAyahs] = useState([]);
   const [fontSizeArabic, setFontSizeArabic] = useState(32);
@@ -86,7 +87,6 @@ export default function SurahDetailScreen(props) {
   const surahName = surahInfo?.name_arabic || '';
   const surahLatin = surahInfo?.name_simple || '';
   const juzNumber = surahInfo?.juz_number || surahInfo?.chapter_number || '';
-  const navigation = props.navigation;
 
   // Ayet arama filtresi
   const filteredAyahs = search.trim().length > 0
@@ -97,12 +97,12 @@ export default function SurahDetailScreen(props) {
       )
     : ayahs;
 
-  if (!id) return <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}><Text style={{ color: themeColors.text }}>Sure ID bulunamadı.</Text></View>;
-  if (loading) return <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}><ActivityIndicator size="large" color="#a94442" /><Text style={{ marginTop: 16, color: themeColors.text }}>Yükleniyor...</Text></View>;
-  if (error) return <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}><Text style={{ color: 'red' }}>{error}</Text></View>;
+  if (!id) return <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}><Text style={{ color: themeColors.text }}>{t('surahNotFound') || 'Sure ID bulunamadı.'}</Text></View>;
+  if (loading) return <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}><ActivityIndicator size="large" color="#a94442" /><Text style={{ marginTop: 16, color: themeColors.text }}>{t('loading')}</Text></View>;
+  if (error) return <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}><Text style={{ color: 'red' }}>{t('ayahFetchError') || error}</Text></View>;
   if (!surahInfo || !Array.isArray(ayahs) || ayahs.length === 0) return (
-    <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}>
-      <Text style={{ color: themeColors.text }}>Ayet bulunamadı.</Text>
+    <View style={[stylesMushaf.center, { backgroundColor: themeColors.background }]}> 
+      <Text style={{ color: themeColors.text }}>{t('noAyahFound') || 'Ayet bulunamadı.'}</Text>
       <Text style={{ fontSize: 12, color: '#888', marginTop: 8 }}>Debug: ayahs={Array.isArray(ayahs) ? ayahs.length : 'yok'}</Text>
     </View>
   );

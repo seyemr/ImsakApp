@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, StyleSheet, Platform } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchMonthlyPrayerTimes, normalizeCity } from '../api/imsakiye';
+import { fetchMonthlyPrayerTimes } from '../api/imsakiye';
 import { useThemeContext } from '../context/ThemeContext';
 import { useNotificationContext } from '../context/NotificationContext';
 import CitySelector from '../components/CitySelector';
@@ -23,52 +23,77 @@ const MonthlyScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Şehir seçimini ve veri yüklemeyi yönet
   useEffect(() => {
     const loadCity = async () => {
+      setLoading(true);
+      setError(null);
       const selected = await AsyncStorage.getItem('selected_city');
       if (selected) setCity(selected);
+      else setLoading(false);
     };
     loadCity();
   }, []);
 
+  // Şehir değiştiğinde veya ilk yüklendiğinde imsakiye verisini çek
   useEffect(() => {
-    if (!city) return;
+    if (!city) {
+      setData(null);
+      setLoading(true);
+      return;
+    }
     setLoading(true);
     setError(null);
-    const now = new Date();
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear();
-    fetchMonthlyPrayerTimes(city, month, year)
-      .then((res) => {
-        if (!res || !Array.isArray(res) || res.length === 0) setError('Veri alınamadı (şehir: ' + city + ')');
-        else setData(res);
+    setData(null);
+    fetchMonthlyPrayerTimes(city)
+      .then((result) => {
+        if (!result || !Array.isArray(result) || result.length === 0) {
+          setError('Seçilen şehir için imsakiye verisi bulunamadı.');
+          setData(null);
+        } else {
+          setData(result);
+        }
+        setLoading(false);
       })
-      .catch((err) => setError('İstek hatası: ' + (err?.message || err)))
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        setError(typeof err === 'string' ? err : 'İmsakiye verisi alınırken bir hata oluştu.');
+        setData(null);
+        setLoading(false);
+      });
   }, [city]);
 
   const todayISO = new Date().toISOString().split("T")[0];
 
+  // Yükleniyor
   if (loading) return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.background }}>
       <ActivityIndicator size="large" color={themeColors.primary} style={{ marginTop: 32 }} />
       <Text style={{ color: themeColors.text, marginTop: 16 }}>Yükleniyor...</Text>
     </View>
   );
+
+  // Hata varsa göster ve tekrar şehir seçtir
   if (error) return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.background, padding: 32 }}>
       <Text style={{ fontSize: 48, color: themeColors.error, marginBottom: 16 }}>!</Text>
-      <Text style={{ color: themeColors.error, fontSize: 18, textAlign: 'center' }}>{error}</Text>
+      <Text style={{ color: themeColors.error, fontSize: 18, textAlign: 'center', marginBottom: 16 }}>{error}</Text>
+      <CitySelector onSelect={(c) => { setCity(c); setError(null); setLoading(true); }} />
     </View>
   );
+
+  // Şehir seçilmemişse CitySelector göster
   if (!city) return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.background, padding: 32 }}>
-      <Text style={{ color: themeColors.error, fontSize: 18, textAlign: 'center' }}>Lütfen bir şehir seçin.</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.background }}>
+      <Text style={{ color: themeColors.text, fontSize: 16, marginBottom: 16 }}>Lütfen bir şehir seçin</Text>
+      <CitySelector onSelect={(c) => { setCity(c); setError(null); setLoading(true); }} />
     </View>
   );
+
+  // Veri yoksa
   if (!data || !Array.isArray(data) || data.length === 0) return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.background, padding: 32 }}>
-      <Text style={{ color: themeColors.error, fontSize: 18, textAlign: 'center' }}>Aylık imsakiye verisi bulunamadı. (Şehir: {city})</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.background }}>
+      <Text style={{ color: themeColors.text, fontSize: 16, marginBottom: 16 }}>İmsakiye verisi bulunamadı.</Text>
+      <CitySelector onSelect={(c) => { setCity(c); setError(null); setLoading(true); }} />
     </View>
   );
 
@@ -78,57 +103,52 @@ const MonthlyScreen = () => {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColors.background }]}>  
-      {/* Sticky header */}
-      <View style={styles.stickyHeaderWrapper}>
-        <View style={styles.headerTopRow}>
-          <Text style={styles.headerTitle}>{city ? `${city.toUpperCase()} (${new Date().getFullYear()})` : 'Aylık İmsakiye'}</Text>
-          <View style={styles.headerCitySelector}><CitySelector onSelect={setCity} /></View>
+      <View style={[styles.container, { backgroundColor: themeColors.background }]}>  
+        {/* Sticky header */}
+        <View style={styles.stickyHeaderWrapper}>
+          <View style={styles.headerTopRow}>
+            <Text style={styles.headerTitle}>{city ? `${city.toUpperCase()} (${new Date().getFullYear()})` : 'Aylık İmsakiye'}</Text>
+            {!!city && <View style={styles.headerCitySelector}><CitySelector onSelect={(c) => { setCity(c); setError(null); setLoading(true); }} /></View>}
+          </View>
+          <View style={styles.tableHeaderRow}>
+            <Text style={styles.tableHeaderCell}>Vakitler</Text>
+            <Text style={styles.tableHeaderCell}>İmsak</Text>
+            <Text style={styles.tableHeaderCell}>Güneş</Text>
+            <Text style={styles.tableHeaderCell}>Öğle</Text>
+            <Text style={styles.tableHeaderCell}>İkindi</Text>
+            <Text style={styles.tableHeaderCell}>Akşam</Text>
+            <Text style={styles.tableHeaderCell}>Yatsı</Text>
+          </View>
         </View>
-        <View style={styles.tableHeaderRow}>
-          <Text style={styles.tableHeaderCell}>Vakitler</Text>
-          <Text style={styles.tableHeaderCell}>İmsak</Text>
-          <Text style={styles.tableHeaderCell}>Güneş</Text>
-          <Text style={styles.tableHeaderCell}>Öğle</Text>
-          <Text style={styles.tableHeaderCell}>İkindi</Text>
-          <Text style={styles.tableHeaderCell}>Akşam</Text>
-          <Text style={styles.tableHeaderCell}>Yatsı</Text>
-        </View>
+        {/* Table body */}
+        <ScrollView style={styles.tableBody} contentContainerStyle={{ paddingBottom: 32 }}>
+          {data && data.map((item, idx) => {
+            const [day, month, year] = item.date.gregorian.date.split('-');
+            const itemISO = `${year}-${month}-${day}`;
+            const isToday = itemISO === todayISO;
+            const rowBg = isToday ? styles.todayRow : styles.tableRow;
+            const turkceTarih = `${day} ${aylar[parseInt(month, 10) - 1]} ${year}`;
+            return (
+                <View key={item.date.readable} style={rowBg}>
+                  <Text style={[styles.tableCell, styles.dateCell, isToday && styles.todayCell]}>{turkceTarih}</Text>
+                  {vakitKeys.map(({ key }) => {
+                    const vakitValue = item.timings[key]
+                      .replace(/\s*\(\+\d+\)/, '')
+                      .replace(/\s*\+\d+/, '');
+                    return (
+                      <Text
+                        key={key}
+                        style={[styles.tableCell, isToday && styles.todayCell]}
+                      >
+                        {vakitValue}
+                      </Text>
+                    );
+                  })}
+                </View>
+            );
+          })}
+        </ScrollView>
       </View>
-      {/* Table body */}
-      <ScrollView style={styles.tableBody} contentContainerStyle={{ paddingBottom: 32 }}>
-        {data && data.map((item, idx) => {
-          const [day, month, year] = item.date.gregorian.date.split('-');
-          const itemISO = `${year}-${month}-${day}`;
-          const isToday = itemISO === todayISO;
-          const rowBg = isToday ? styles.todayRow : styles.tableRow;
-          // Türkçe ay adı
-          const aylar = [
-            'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-            'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
-          ];
-          const turkceTarih = `${day} ${aylar[parseInt(month, 10) - 1]} ${year}`;
-          return (
-            <View key={item.date.readable} style={rowBg}>
-              <Text style={[styles.tableCell, styles.dateCell, isToday && styles.todayCell]}>{turkceTarih}</Text>
-              {vakitKeys.map(({ key }) => {
-                const vakitValue = item.timings[key]
-                  .replace(/\s*\(\+\d+\)/, '')
-                  .replace(/\s*\+\d+/, '');
-                return (
-                  <Text
-                    key={key}
-                    style={[styles.tableCell, isToday && styles.todayCell]}
-                  >
-                    {vakitValue}
-                  </Text>
-                );
-              })}
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
   );
 };
 

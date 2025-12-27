@@ -5,10 +5,12 @@ import styles from '../styles/styles';
 import surahNamesTr from '../data/surahNames.tr.json';
 import { useThemeContext } from '../context/ThemeContext';
 import { useNotificationContext } from '../context/NotificationContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function SurahListScreen({ navigation }) {
   const { themeColors } = useThemeContext();
   const { imsakNotif, aksamNotif } = useNotificationContext();
+  const { t } = useLanguage();
   const [surahs, setSurahs] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [error, setError] = useState(null);

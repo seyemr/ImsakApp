@@ -7,28 +7,10 @@ const METHOD = 13;
 const CACHE_PREFIX = 'prayer_times_';
 const CACHE_DURATION = 60 * 60 * 1000; // 1 saat (ms)
 
-// Türkçe karakterleri İngilizce'ye çevir
-function normalizeCity(city) {
-  return city
-    .replace(/ç/g, 'c')
-    .replace(/ğ/g, 'g')
-    .replace(/ı/g, 'i')
-    .replace(/ö/g, 'o')
-    .replace(/ş/g, 's')
-    .replace(/ü/g, 'u')
-    .replace(/Ç/g, 'C')
-    .replace(/Ğ/g, 'G')
-    .replace(/İ/g, 'I')
-    .replace(/Ö/g, 'O')
-    .replace(/Ş/g, 'S')
-    .replace(/Ü/g, 'U');
-}
-
 const getCacheKey = (city) => `${CACHE_PREFIX}${city.toLowerCase()}`;
 
 export const fetchPrayerTimes = async (city) => {
-  const normCity = normalizeCity(city);
-  const cacheKey = getCacheKey(normCity);
+  const cacheKey = getCacheKey(city);
   try {
     const cached = await AsyncStorage.getItem(cacheKey);
     if (cached) {
@@ -43,11 +25,10 @@ export const fetchPrayerTimes = async (city) => {
 
   try {
     const response = await axios.get(API_URL, {
-      params: { city: normCity, country: COUNTRY, method: METHOD },
+      params: { city, country: COUNTRY, method: METHOD },
       responseType: 'json',
       validateStatus: () => true, // Her durumda response al
     });
-    // Yanıtın JSON olup olmadığını kontrol et
     let data = response.data;
     if (typeof data === 'string') {
       try {
@@ -64,27 +45,31 @@ export const fetchPrayerTimes = async (city) => {
     await AsyncStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
     return data;
   } catch (error) {
-    // Hata detayını logla
+    let errorMsg = 'Bir hata oluştu';
     if (error.response) {
       console.log('API ERROR:', error.response.status, error.response.data);
+      errorMsg =
+        (error.response.data && (error.response.data.data || error.response.data.status)) ||
+        error.message ||
+        'Bir hata oluştu';
+      if (error.response.status) {
+        errorMsg += ' (HTTP Status: ' + error.response.status + ')';
+      }
     } else {
       console.log('API ERROR:', error.message);
+      errorMsg = error.message || 'Bir hata oluştu';
     }
-    throw new Error(
-      (error?.response?.data?.data || error?.response?.data?.status || error.message || 'Bir hata oluştu') +
-      (error?.response?.status ? ' (HTTP Status: ' + error.response.status + ')' : '')
-    );
+    throw new Error(errorMsg);
   }
 };
 
 const CALENDAR_API_URL = 'https://api.aladhan.com/v1/calendarByCity';
 
 export const fetchMonthlyPrayerTimes = async (city, month, year) => {
-  const normCity = normalizeCity(city);
   try {
     const response = await axios.get(CALENDAR_API_URL, {
       params: {
-        city: normCity,
+        city,
         country: COUNTRY,
         method: METHOD,
         month,
@@ -108,14 +93,20 @@ export const fetchMonthlyPrayerTimes = async (city, month, year) => {
     }
     return data.data;
   } catch (error) {
+    let errorMsg = 'Bir hata oluştu';
     if (error.response) {
       console.log('API ERROR:', error.response.status, error.response.data);
+      errorMsg =
+        (error.response.data && (error.response.data.data || error.response.data.status)) ||
+        error.message ||
+        'Bir hata oluştu';
+      if (error.response.status) {
+        errorMsg += ' (HTTP Status: ' + error.response.status + ')';
+      }
     } else {
       console.log('API ERROR:', error.message);
+      errorMsg = error.message || 'Bir hata oluştu';
     }
-    throw new Error(
-      (error?.response?.data?.data || error?.response?.data?.status || error.message || 'Bir hata oluştu') +
-      (error?.response?.status ? ' (HTTP Status: ' + error.response.status + ')' : '')
-    );
+    throw new Error(errorMsg);
   }
 };

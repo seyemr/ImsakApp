@@ -25,6 +25,11 @@ import { getRandomHadisFromApi } from '../api/hadisApi';
 import { useLanguage } from '../context/LanguageContext';
 import { useThemeContext } from '../context/ThemeContext';
 import { useNotificationContext } from '../context/NotificationContext';
+import QuranProgressBar from '../components/QuranProgressBar';
+import Zikirmatik from '../components/Zikirmatik';
+import KazaCetelesi from '../components/KazaCetelesi';
+import WidgetPreview from '../components/WidgetPreview';
+import duas from '../data/duas.json';
 
 const STORAGE_KEY_SELECTED_CITY = '@selected_city';
 const STORAGE_KEY_SAVED_CITIES = '@saved_cities';
@@ -106,7 +111,7 @@ function getRandomHadis() {
 
 const MAX_HADIS_LENGTH = 220;
 
-const HomeScreen = () => {
+function HomeScreen() {
   const theme = useTheme();
   const navigation = useNavigation();
   const { t } = useLanguage();
@@ -133,6 +138,8 @@ const HomeScreen = () => {
   const [fiveDays, setFiveDays] = useState([]);
   const [hadisModalVisible, setHadisModalVisible] = useState(false);
   const [selectedHadis, setSelectedHadis] = useState(null);
+  const [gununDuasi, setGununDuasi] = useState(null);
+  const [duaModalVisible, setDuaModalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -146,6 +153,8 @@ const HomeScreen = () => {
       // } catch (e) {}
       setVaktinAyet(pickRandomAyet(vaktAyetleri));
       setVaktinHadis(getRandomHadis());
+      // Rastgele günün duası
+      setGununDuasi(duas[Math.floor(Math.random() * duas.length)]);
     })();
   }, []);
 
@@ -353,10 +362,61 @@ const HomeScreen = () => {
               </View>
             </View>
           </Modal>
+
+          {/* GÜNÜN DUASI */}
+          <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 8 }}>Günün Duası</Text>
+          <TouchableOpacity
+            style={{ backgroundColor: '#fff', borderRadius: 14, margin: 12, padding: 16, shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 2, elevation: 2 }}
+            onPress={() => setDuaModalVisible(true)}
+            activeOpacity={0.85}
+          >
+            <Text style={{ color: '#274690', fontWeight: 'bold', fontSize: 18, marginBottom: 6, textAlign: 'center' }}>{gununDuasi?.title}</Text>
+            <Text style={{ color: '#232a3b', fontSize: 16, textAlign: 'center' }} numberOfLines={2}>{gununDuasi?.turkish}</Text>
+          </TouchableOpacity>
+          <Modal visible={duaModalVisible} animationType="slide" transparent onRequestClose={() => setDuaModalVisible(false)}>
+            <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: 18 }}>
+              <View style={{ backgroundColor: '#fff', borderRadius: 18, padding: 18, width: '100%', maxWidth: 400, maxHeight: '80%' }}>
+                <ScrollView>
+                  <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#274690', marginBottom: 10, textAlign: 'center' }}>{gununDuasi?.title}</Text>
+                  <Text style={{ fontSize: 20, color: '#222', marginBottom: 10, textAlign: 'center', fontFamily: 'AmiriQuran-Regular' }}>{gununDuasi?.arabic}</Text>
+                  <Text style={{ fontSize: 17, color: '#232a3b', marginBottom: 10, textAlign: 'center' }}>{gununDuasi?.turkish}</Text>
+                  <Text style={{ fontSize: 15, color: '#888', textAlign: 'center', marginBottom: 10 }}>{gununDuasi?.category}</Text>
+                </ScrollView>
+                <TouchableOpacity onPress={() => setDuaModalVisible(false)} style={{ alignSelf: 'center', marginTop: 10, backgroundColor: '#274690', borderRadius: 8, paddingHorizontal: 18, paddingVertical: 8 }}>
+                  <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Kapat</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          {/* Yeni özellikler için butonlar */}
+          <View style={styles.menuRowModern}>
+            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('KuranMeali')}>
+              <Icon name="book-open" size={32} color="#274690" />
+              <Text style={styles.menuLabelModern}>Kuran Meali</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Dualar')}>
+              <Icon name="hands-pray" size={32} color="#274690" />
+              <Text style={styles.menuLabelModern}>Dualar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('WidgetPreview')}>
+              <Icon name="widgets" size={32} color="#274690" />
+              <Text style={styles.menuLabelModern}>Widget</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Zikirmatik')}>
+              <Icon name="counter" size={32} color="#274690" />
+              <Text style={styles.menuLabelModern}>Zikirmatik</Text>
+            </TouchableOpacity>
+          </View>
+          {/* Takipli Kuran, Kaza Çetelesi ana ekranda gösterilebilir */}
+          {/* <QuranProgressBar page={1} totalPages={675} /> */}
+          {/* <KazaCetelesi /> */}
+
           {/* Menü butonları */}
           <View style={styles.bottomBoxModern}>
             <View style={styles.menuRowModern}>
-              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('SurahList')}>
+              {/* Kur'an butonu sadece QuranPdf ekranına yönlendirilecek */}
+              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('QuranPdf')}>
                 <Icon name="book-open-variant" size={28} color="#e6eaf3" />
                 <Text style={styles.menuLabelModern}>{t('quran') || "Kur'an-ı Kerim"}</Text>
               </TouchableOpacity>
@@ -375,6 +435,10 @@ const HomeScreen = () => {
               <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Hadis')}>
                 <Icon name="book" size={28} color="#e6eaf3" />
                 <Text style={styles.menuLabelModern}>{t('hadiths') || 'Hadisler'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('PdfLibraryScreen')}>
+                <Icon name="book-open-page-variant" size={28} color="#e6eaf3" />
+                <Text style={styles.menuLabelModern}>Kitaplar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -566,7 +630,6 @@ const styles = StyleSheet.create({
     marginTop: 1,
     fontWeight: 'bold',
   },
-
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 16 },
   modalContainer: { backgroundColor: '#0d1730', borderRadius: 12, padding: 12 },
   input: { flex: 1, backgroundColor: '#091025', color: '#fff', paddingHorizontal: 10, borderRadius: 8, height: 42 },

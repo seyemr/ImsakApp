@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Clean project: remove vendor, mocks, tests, unused assets",
+			"command": "rm -rf vendor __mocks__ __tests__ assets/fonts/module.js assets/images/quran_page_416.png src/assets/fonts/module.js src/assets/images/quran_page_416.png android/app/src/main/assets/fonts/ android/app/src/main/assets/images/",
+			"group": "build"
+		}
+	]
+}

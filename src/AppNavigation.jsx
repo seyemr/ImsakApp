@@ -13,8 +13,27 @@ import SurahMealScreen from './screens/SurahMealScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import BookDetailScreen from './screens/BookDetailScreen';
 import HadisScreen from './screens/HadisScreen';
+import KuranPdfScreen from './screens/KuranPdfScreen';
+import KuranMealiScreen from './screens/KuranMealiScreen';
+import DualarScreen from './screens/DualarScreen';
+import WidgetPreview from './components/WidgetPreview';
 import { AppDarkTheme, AppLightTheme } from './utils/theme';
 import { useColorScheme } from 'react-native';
+import ZikirmatikScreen from './screens/ZikirmatikScreen';
+import KazaCetelesiScreen from './screens/KazaCetelesiScreen';
+import PdfLibraryScreen from './screens/PdfLibraryScreen';
+import AliyyaPdfScreen from './screens/AliyyaPdfScreen';
+import MevdudiPdfScreen from './screens/MevdudiPdfScreen';
+import RiyazusSalihinPdfScreen from './screens/RiyazusSalihinPdfScreen';
+import Ogutler1PdfScreen from './screens/Ogutler1PdfScreen';
+import Ogutler2PdfScreen from './screens/Ogutler2PdfScreen';
+import RasimPdfScreen from './screens/RasimPdfScreen';
+import SiyerPdfScreen from './screens/SiyerPdfScreen';
+import KuranOkuAnlaYasaPdfScreen from './screens/KuranOkuAnlaYasaPdfScreen';
+import YoldakiIsaretlerPdfScreen from './screens/YoldakiIsaretlerPdfScreen';
+import MealPdfScreen from './screens/MealPdfScreen';
+import KirkAyetPdfScreen from './screens/KirkAyetPdfScreen';
+import KuranKerimMealiPdfScreen from './screens/KuranKerimMealiPdfScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +55,27 @@ const AppNavigation = () => {
         <Stack.Screen name="Library" component={LibraryScreen} />
         <Stack.Screen name="BookDetail" component={BookDetailScreen} />
         <Stack.Screen name="Hadis" component={HadisScreen} />
+        <Stack.Screen name="KuranPdf" component={KuranPdfScreen} />
+        <Stack.Screen name="KuranMeali" component={KuranMealiScreen} />
+        <Stack.Screen name="Dualar" component={DualarScreen} />
+        <Stack.Screen name="WidgetPreview" component={WidgetPreview} />
+        <Stack.Screen name="Zikirmatik" component={ZikirmatikScreen} options={{ animation: 'fade_from_bottom', presentation: 'card' }} />
+        <Stack.Screen name="KazaCetelesi" component={KazaCetelesiScreen} options={{ animation: 'fade_from_bottom', presentation: 'card' }} />
+        <Stack.Screen name="PdfLibraryScreen" component={PdfLibraryScreen} options={{ title: 'PDF Kütüphanesi' }} />
+        {/* PDF özel ekranları */}
+        <Stack.Screen name="AliyyaPdfScreen" component={AliyyaPdfScreen} />
+        <Stack.Screen name="MevdudiPdfScreen" component={MevdudiPdfScreen} />
+        <Stack.Screen name="RiyazusSalihinPdfScreen" component={RiyazusSalihinPdfScreen} />
+        <Stack.Screen name="Ogutler1PdfScreen" component={Ogutler1PdfScreen} />
+        <Stack.Screen name="Ogutler2PdfScreen" component={Ogutler2PdfScreen} />
+        <Stack.Screen name="RasimPdfScreen" component={RasimPdfScreen} />
+        <Stack.Screen name="SiyerPdfScreen" component={SiyerPdfScreen} />
+        <Stack.Screen name="KuranOkuAnlaYasaPdfScreen" component={KuranOkuAnlaYasaPdfScreen} />
+        <Stack.Screen name="YoldakiIsaretlerPdfScreen" component={YoldakiIsaretlerPdfScreen} />
+        <Stack.Screen name="KuranPdfScreen" component={KuranPdfScreen} />
+        <Stack.Screen name="MealPdfScreen" component={MealPdfScreen} />
+        <Stack.Screen name="KirkAyetPdfScreen" component={KirkAyetPdfScreen} />
+        <Stack.Screen name="KuranKerimMealiPdfScreen" component={KuranKerimMealiPdfScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
