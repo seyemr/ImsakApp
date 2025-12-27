@@ -25,10 +25,6 @@ import { getRandomHadisFromApi } from '../api/hadisApi';
 import { useLanguage } from '../context/LanguageContext';
 import { useThemeContext } from '../context/ThemeContext';
 import { useNotificationContext } from '../context/NotificationContext';
-import QuranProgressBar from '../components/QuranProgressBar';
-import Zikirmatik from '../components/Zikirmatik';
-import KazaCetelesi from '../components/KazaCetelesi';
-import WidgetPreview from '../components/WidgetPreview';
 import duas from '../data/duas.json';
 
 const STORAGE_KEY_SELECTED_CITY = '@selected_city';
@@ -140,6 +136,8 @@ function HomeScreen() {
   const [selectedHadis, setSelectedHadis] = useState(null);
   const [gununDuasi, setGununDuasi] = useState(null);
   const [duaModalVisible, setDuaModalVisible] = useState(false);
+  // Şehir seçme modalı için state
+  const [cityModalVisible, setCityModalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -280,6 +278,30 @@ function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: themeColors.background }}>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#0b1220' }}>
+        {/* Şehir seçici minimalist sağ üst */}
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 8 }}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a2238', borderRadius: 16, paddingVertical: 6, paddingHorizontal: 14 }}
+            onPress={() => setCityModalVisible(true)}
+            activeOpacity={0.7}
+          >
+            <Icon name="map-marker" size={18} color="#21e6c1" style={{ marginRight: 6 }} />
+            <Text style={{ color: '#e6eaf3', fontWeight: 'bold', fontSize: 15 }}>{city}</Text>
+            <Icon name="chevron-down" size={18} color="#e6eaf3" style={{ marginLeft: 2 }} />
+          </TouchableOpacity>
+        </View>
+        {/* Şehir seçme modalı */}
+        <Modal visible={cityModalVisible} animationType="slide" transparent onRequestClose={() => setCityModalVisible(false)}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: 18 }}>
+            <View style={{ backgroundColor: '#fff', borderRadius: 18, padding: 18, width: '100%', maxWidth: 400, maxHeight: '80%' }}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#274690', marginBottom: 10, textAlign: 'center' }}>Şehir Seçiniz</Text>
+              <CitySelector onSelect={c => { setCity(c); setCityModalVisible(false); }} />
+              <TouchableOpacity onPress={() => setCityModalVisible(false)} style={{ alignSelf: 'center', marginTop: 16, backgroundColor: '#274690', borderRadius: 8, paddingHorizontal: 18, paddingVertical: 8 }}>
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Kapat</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 32 }}>
           <View style={styles.topBoxModern}>
             <Text style={styles.countdownLabelModern}>{nextVakit} ezanına kalan</Text>
@@ -301,18 +323,9 @@ function HomeScreen() {
                   <Icon name={vakitKeys[i].icon} size={22} color={isNext ? '#222' : '#e6eaf3'} />
                   <Text style={[styles.vakitTimeModern, isNext ? styles.activeVakitTimeModern : null]}>{data?.data?.timings?.[key] || '--:--'}</Text>
                   <Text style={[styles.vakitLabelModern, isNext ? styles.activeVakitLabelModern : null]}>{label}</Text>
-                  {/* Sadece bir yerde gösterilecek: */}
-                  {/* {isNext && (
-                    <Text style={{ color: '#222', fontWeight: 'bold', fontSize: 13, marginTop: 2 }}>{countdown} kaldı</Text>
-                  )} */}
                 </View>
               );
             })}
-          </View>
-
-          {/* Modern CitySelector burada */}
-          <View style={{ alignItems: 'center', marginVertical: 8 }}>
-            <CitySelector onSelect={setCity} />
           </View>
 
           {/* GÜNÜN AYETİ - rastgele */}
@@ -388,6 +401,9 @@ function HomeScreen() {
               </View>
             </View>
           </Modal>
+
+          {/* WidgetPreview bileşeni eklendi */}
+          {/* <WidgetPreview vakit={nextVakit} kalanSure={countdown} city={city} /> */}
 
           {/* ANA MENÜ: Her zaman görünür, en altta */}
           <View style={styles.bottomBoxModern}>

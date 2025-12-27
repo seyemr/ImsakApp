@@ -35,7 +35,6 @@ function App() {
 
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
-
   return (
     <View style={styles.container}>
       <AppNavigation />

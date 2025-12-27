@@ -9,17 +9,14 @@ const pdfList = [
   { name: 'Riyazüs Salihin', file: 'Riyazus_Salihin.pdf', type: 'pdf' },
   { name: 'Gelin Müslüman Olalım', file: 'mevdudi.pdf', type: 'pdf' },
   { name: 'Doğu ile Batı Arasında İslam', file: 'aliyya.pdf', type: 'pdf' },
-  { name: 'Kuran Yolu', file: 'meali.epub', type: 'epub' },
   { name: 'Öğütler 1', file: 'ogutler_1.pdf', type: 'pdf' },
   { name: 'Öğütler 2', file: 'ogutler_2.pdf', type: 'pdf' },
   { name: 'Müslümanca Düşünme Üzerine', file: 'rasim.pdf', type: 'pdf' },
   { name: 'Siyer-i Nebi', file: 'siyer.pdf', type: 'pdf' },
   { name: '40 Ayette Kuran', file: '40AyetteKuran.pdf', type: 'pdf' },
-  { name: 'Kuran Dökümanı', file: 'kuran.doc', type: 'doc' },
   { name: 'Kuran Oku Anla Yaşa', file: 'KuranOkuAnlaYasa.pdf', type: 'pdf' },
   { name: 'Yoldaki Işaretler', file: 'Yoldaki_Isaretler.pdf', type: 'pdf' },
   { name: 'Kur’an-ı Kerim', file: 'kuran.pdf', type: 'pdf' },
-  { name: 'Siyer-i Nebi (epub)', file: 'siyer-i_nebi.epub', type: 'epub' },
   
   
 ];

@@ -34,6 +34,7 @@ import YoldakiIsaretlerPdfScreen from './screens/YoldakiIsaretlerPdfScreen';
 import MealPdfScreen from './screens/MealPdfScreen';
 import KirkAyetPdfScreen from './screens/KirkAyetPdfScreen';
 import KuranKerimMealiPdfScreen from './screens/KuranKerimMealiPdfScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const AppNavigation = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="MainTabs" component={TabNavigator} />
         <Stack.Screen name="CitySelect" component={CitySelectScreen} />
         <Stack.Screen name="Chat" component={ChatScreen} />
