@@ -280,7 +280,7 @@ function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: themeColors.background }}>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#0b1220' }}>
-        <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 32 }}>
           <View style={styles.topBoxModern}>
             <Text style={styles.countdownLabelModern}>{nextVakit} ezanına kalan</Text>
             <Text style={styles.countdownModern}>{countdown}</Text>
@@ -389,33 +389,9 @@ function HomeScreen() {
             </View>
           </Modal>
 
-          {/* Yeni özellikler için butonlar */}
-          <View style={styles.menuRowModern}>
-            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('KuranMeali')}>
-              <Icon name="book-open" size={32} color="#274690" />
-              <Text style={styles.menuLabelModern}>Kuran Meali</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Dualar')}>
-              <Icon name="hands-pray" size={32} color="#274690" />
-              <Text style={styles.menuLabelModern}>Dualar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('WidgetPreview')}>
-              <Icon name="widgets" size={32} color="#274690" />
-              <Text style={styles.menuLabelModern}>Widget</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Zikirmatik')}>
-              <Icon name="counter" size={32} color="#274690" />
-              <Text style={styles.menuLabelModern}>Zikirmatik</Text>
-            </TouchableOpacity>
-          </View>
-          {/* Takipli Kuran, Kaza Çetelesi ana ekranda gösterilebilir */}
-          {/* <QuranProgressBar page={1} totalPages={675} /> */}
-          {/* <KazaCetelesi /> */}
-
-          {/* Menü butonları */}
+          {/* ANA MENÜ: Her zaman görünür, en altta */}
           <View style={styles.bottomBoxModern}>
             <View style={styles.menuRowModern}>
-              {/* Kur'an butonu sadece QuranPdf ekranına yönlendirilecek */}
               <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('QuranPdf')}>
                 <Icon name="book-open-variant" size={28} color="#e6eaf3" />
                 <Text style={styles.menuLabelModern}>{t('quran') || "Kur'an-ı Kerim"}</Text>
@@ -424,21 +400,21 @@ function HomeScreen() {
                 <Icon name="library" size={28} color="#e6eaf3" />
                 <Text style={styles.menuLabelModern}>{t('library') || 'Kütüphane'}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('AlarmSettings')}>
-                <Icon name="alarm" size={28} color="#e6eaf3" />
-                <Text style={styles.menuLabelModern}>{t('alarmSettings') || 'Alarm Ayarları'}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('DiniGunler')}>
-                <Icon name="calendar" size={28} color="#e6eaf3" />
-                <Text style={styles.menuLabelModern}>{t('religiousDays') || 'Dini Günler'}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Hadis')}>
-                <Icon name="book" size={28} color="#e6eaf3" />
-                <Text style={styles.menuLabelModern}>{t('hadiths') || 'Hadisler'}</Text>
-              </TouchableOpacity>
               <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('PdfLibraryScreen')}>
                 <Icon name="book-open-page-variant" size={28} color="#e6eaf3" />
                 <Text style={styles.menuLabelModern}>Kitaplar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('KuranMeali')}>
+                <Icon name="book-open" size={28} color="#e6eaf3" />
+                <Text style={styles.menuLabelModern}>Kuran Meali</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Dualar')}>
+                <Icon name="hands-pray" size={28} color="#e6eaf3" />
+                <Text style={styles.menuLabelModern}>Dualar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('Zikirmatik')}>
+                <Icon name="counter" size={28} color="#e6eaf3" />
+                <Text style={styles.menuLabelModern}>Zikirmatik</Text>
               </TouchableOpacity>
             </View>
           </View>

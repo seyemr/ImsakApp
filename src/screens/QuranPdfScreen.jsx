@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Modal, FlatList, 
 import Pdf from 'react-native-pdf';
 import { useThemeContext } from '../context/ThemeContext';
 import surahNamesTr from '../data/surahNames.tr.json';
-import { juzPageMap, surahPageMap } from '../data/quranPageMaps';
+// import { juzPageMap, surahPageMap } from '../data/quranPageMaps';
 import { useRoute } from '@react-navigation/native';
 
 const TOTAL_PAGES = 675;

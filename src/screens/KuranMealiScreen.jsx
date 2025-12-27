@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Text, TextInput, TouchableOpacity, Modal, FlatList } from 'react-native';
 import Pdf from 'react-native-pdf';
 import surahNamesTr from '../data/surahNames.tr.json';
-import { surahPageMap } from '../data/quranPageMaps';
+// import { surahPageMap } from '../data/quranPageMaps';
 
 const TOTAL_PAGES = 604; // Mealin toplam sayfa sayısı (güncellenebilir)
 
