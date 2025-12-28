@@ -3,11 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './navigation/TabNavigator';
 import CitySelectScreen from './screens/CitySelectScreen';
-import ChatScreen from './screens/ChatScreen';
 import SurahListScreen from './screens/SurahListScreen';
 import SurahDetailScreen from './screens/SurahDetailScreen';
-import AlarmSettingsScreen from './screens/AlarmSettingsScreen';
-import DiniGunlerScreen from './screens/DiniGunlerScreen';
 import SurahArabicScreen from './screens/SurahArabicScreen';
 import SurahMealScreen from './screens/SurahMealScreen';
 import LibraryScreen from './screens/LibraryScreen';
@@ -20,7 +17,6 @@ import WidgetPreview from './components/WidgetPreview';
 import { AppDarkTheme, AppLightTheme } from './utils/theme';
 import { useColorScheme } from 'react-native';
 import ZikirmatikScreen from './screens/ZikirmatikScreen';
-import KazaCetelesiScreen from './screens/KazaCetelesiScreen';
 import PdfLibraryScreen from './screens/PdfLibraryScreen';
 import AliyyaPdfScreen from './screens/AliyyaPdfScreen';
 import MevdudiPdfScreen from './screens/MevdudiPdfScreen';
@@ -47,11 +43,8 @@ const AppNavigation = () => {
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="MainTabs" component={TabNavigator} />
         <Stack.Screen name="CitySelect" component={CitySelectScreen} />
-        <Stack.Screen name="Chat" component={ChatScreen} />
         <Stack.Screen name="SurahList" component={SurahListScreen} />
         <Stack.Screen name="SurahDetail" component={SurahDetailScreen} />
-        <Stack.Screen name="AlarmSettings" component={AlarmSettingsScreen} />
-        <Stack.Screen name="DiniGunler" component={DiniGunlerScreen} />
         <Stack.Screen name="SurahArabic" component={SurahArabicScreen} />
         <Stack.Screen name="SurahMeal" component={SurahMealScreen} />
         <Stack.Screen name="Library" component={LibraryScreen} />
@@ -62,7 +55,6 @@ const AppNavigation = () => {
         <Stack.Screen name="Dualar" component={DualarScreen} />
         <Stack.Screen name="WidgetPreview" component={WidgetPreview} />
         <Stack.Screen name="Zikirmatik" component={ZikirmatikScreen} options={{ animation: 'fade_from_bottom', presentation: 'card' }} />
-        <Stack.Screen name="KazaCetelesi" component={KazaCetelesiScreen} options={{ animation: 'fade_from_bottom', presentation: 'card' }} />
         <Stack.Screen name="PdfLibraryScreen" component={PdfLibraryScreen} options={{ title: 'PDF Kütüphanesi' }} />
         {/* PDF özel ekranları */}
         <Stack.Screen name="AliyyaPdfScreen" component={AliyyaPdfScreen} />
