@@ -295,7 +295,7 @@ function HomeScreen() {
           <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: 18 }}>
             <View style={{ backgroundColor: '#fff', borderRadius: 18, padding: 18, width: '100%', maxWidth: 400, maxHeight: '80%' }}>
               <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#274690', marginBottom: 10, textAlign: 'center' }}>Şehir Seçiniz</Text>
-              <CitySelector onSelect={c => { setCity(c); setCityModalVisible(false); }} />
+              <CitySelector onSelect={c => { saveSelectedCity(c); setCityModalVisible(false); }} />
               <TouchableOpacity onPress={() => setCityModalVisible(false)} style={{ alignSelf: 'center', marginTop: 16, backgroundColor: '#274690', borderRadius: 8, paddingHorizontal: 18, paddingVertical: 8 }}>
                 <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Kapat</Text>
               </TouchableOpacity>
