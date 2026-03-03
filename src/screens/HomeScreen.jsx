@@ -408,7 +408,7 @@ function HomeScreen() {
           {/* ANA MENÜ: Her zaman görünür, en altta */}
           <View style={styles.bottomBoxModern}>
             <View style={styles.menuRowModern}>
-              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('QuranPdf')}>
+              <TouchableOpacity style={styles.menuItemModern} onPress={() => navigation.navigate('KuranPdf')}>
                 <Icon name="book-open-variant" size={28} color="#e6eaf3" />
                 <Text style={styles.menuLabelModern}>{t('quran') || "Kur'an-ı Kerim"}</Text>
               </TouchableOpacity>
