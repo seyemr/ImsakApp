@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import MonthlyScreen from '../screens/MonthlyScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import DiniGunlerScreen from '../screens/DiniGunlerScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useColorScheme } from 'react-native';
 import { AppDarkTheme, AppLightTheme } from '../utils/theme';
@@ -22,6 +23,7 @@ const TabNavigator = () => {
           let iconName = '';
           if (route.name === 'Anasayfa') iconName = 'home';
           else if (route.name === 'Aylık İmsakiye') iconName = 'calendar';
+          else if (route.name === 'Dini Günler') iconName = 'star'; // Assuming a star icon for Dini Günler
           else if (route.name === 'Ayarlar') iconName = 'cog';
           return <Icon name={iconName} color={color} size={size} />;
         },
@@ -29,6 +31,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Anasayfa" component={HomeScreen} />
       <Tab.Screen name="Aylık İmsakiye" component={MonthlyScreen} />
+      <Tab.Screen name="Dini Günler" component={DiniGunlerScreen} />
       <Tab.Screen name="Ayarlar" component={SettingsScreen} />
     </Tab.Navigator>
   );
